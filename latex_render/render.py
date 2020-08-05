@@ -42,12 +42,10 @@ class LatexRender:
         """
         text = open(self.input_file, encoding="utf-8").read()
         parts = text.split("$$")
-        if type == 1:
-            for i, part in enumerate(parts):
-                if i & 1:
-                    parts[i] = self._latex_part(part=part.strip())
-
-        text_out = "\n\n".join(parts)
+        for i, part in enumerate(parts):
+            if i & 1:
+                parts[i] = self._latex_part(part=part.strip(), inline=False)
+        text_out = "\n".join(parts)
 
         lines = text_out.split('\n')
         for lid, line in enumerate(lines):
@@ -61,16 +59,19 @@ class LatexRender:
         with open(self.output_file, "w", encoding='utf-8') as f:
             f.write(text_out)
 
-    def _latex_part(self, part):
+    def _latex_part(self, part, inline=True):
         """
 
         :param part:
+        :param inline:
         :return:
         """
-        if self.render_type == 1:
-            part = '![math](' + CODECOGS_RENDER_URL + part.strip()
-        elif type == 2:
-            part = '![math](' + GITHUB_RENDER_URL_BASE + 'math={})'.format(quote(part.strip()))
+        if str(self.render_type) == '1':
+            part = f'![math]({CODECOGS_RENDER_URL}{part.replace(" ", "%20")})'
+        elif str(self.render_type) == '2':
+            part = f'![math]({GITHUB_RENDER_URL_BASE}math={quote(part)})'
         else:
             raise ValueError("type mast be one of `1` and `2`, but got {}".format(self.render_type))
+        if not inline:
+            part = f'<p align="center"> <img src="{re.match("^\!\[math\]\((.*)\)$", part).group(1)}"/> </p>'
         return part
