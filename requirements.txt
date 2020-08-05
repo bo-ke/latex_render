@@ -1,0 +1,2 @@
+setuptools~=39.1.0
+typing~=3.6.4
