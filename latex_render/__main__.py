@@ -24,12 +24,14 @@ LEVEL = logging.DEBUG
 sys.path.insert(0, os.path.dirname(os.path.abspath(os.path.join(__file__, os.pardir))))
 logging.basicConfig(format="%(asctime)s - %(levelname)s - %(name)s - %(message)s", level=LEVEL)
 
+logger = logging.getLogger(__name__)
+
 
 class ArgumentParser(argparse.ArgumentParser):
     """
-        Custom argument parser that will display the default value for an argument
-        in the help message.
-        """
+    Custom argument parser that will display the default value for an argument
+    in the help message.
+    """
 
     _action_defaults_to_ignore = {"help"}
 
@@ -63,6 +65,11 @@ def create_parser(program):
 
 
 def main(program):
+    """
+
+    :param program:
+    :return:
+    """
     parser = create_parser(program=program)
     parser.add_argument("-i", "--i", required=True, dest="input_file_path", help="input file path")
     parser.add_argument("-o", "--o", required=False, dest="output_file_path",
@@ -70,19 +77,21 @@ def main(program):
     parser.add_argument("-type", "--type", required=False, default=1,
                         help="type, 1: use codecogs.com  2: use render.githubusercontent.com")
     args = parser.parse_args()
-    logging.info(msg="using args:", desc=repr(args))
+    logger.info(msg=f'Use parameters: {str(args)}')
     try:
         if os.path.exists(args.input_file_path):
-            if args.input_file.split(".")[-1] in ["md", "MD"]:
+            if args.input_file_path.split(".")[-1] in ["md", "MD"]:
+                logger.info(msg="Start rendering.....")
                 latex_render = LatexRender(input_file=args.input_file_path, output_file=args.output_file_path,
                                            render_type=args.type)
                 latex_render.render()
+                logger.info(msg="Task complete")
             else:
                 raise ValueError("input_file mast be end with `.md` or `.MD`")
         else:
-            raise FileNotFoundError("there is no file {}".format(args.input_file))
+            raise FileNotFoundError(f'there is no such file: `{args.input_file_path}`')
     except Exception as e:
-        logging.error(msg=repr(e))
+        logger.error(msg=repr(e))
 
 
 def run():
