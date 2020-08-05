@@ -73,5 +73,6 @@ class LatexRender:
         else:
             raise ValueError("type mast be one of `1` and `2`, but got {}".format(self.render_type))
         if not inline:
-            part = f'<p align="center"> <img src="{re.match("^\!\[math\]\((.*)\)$", part).group(1)}"/> </p>'
+            part = re.match("^\!\[math\]\((.*)\)$", part).group(1)
+            part = f'<p align="center"> <img src="{part}"/> </p>'
         return part
