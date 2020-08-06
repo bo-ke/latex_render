@@ -24,12 +24,12 @@ optional arguments:
   -h, --help            show this help message and exit
   --version             show program's version number and exit
   -i INPUT_FILE_PATH, --i INPUT_FILE_PATH
-                        input file path
+                        Input file path;
   -o OUTPUT_FILE_PATH, --o OUTPUT_FILE_PATH
-                        output file path, if None use the input file path
+                        Output file path, if not provided, use input file path instead;
   -type TYPE, --type TYPE
-                        type, 1: use codecogs.com 2: use
-                        render.githubusercontent.com (default = 1)
+                        Render type, 1: use codecogs.com 2: use
+                        render.githubusercontent.com (default = 1);
 ```
 
 ## Citing

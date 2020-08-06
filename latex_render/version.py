@@ -14,7 +14,7 @@ _MAJOR = "0"
 _MINOR = "0"
 # On master and in a nightly release the patch should be one ahead of the last
 # released build.
-_PATCH = "1rc1"
+_PATCH = "1"
 # See https://semver.org/#is-v123-a-semantic-version for the semantics.
 
 VERSION_SHORT = "{}.{}".format(_MAJOR, _MINOR)
