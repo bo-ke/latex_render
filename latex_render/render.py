@@ -15,8 +15,8 @@ refer: https://www.zhihu.com/question/26887527
 import re
 from urllib.parse import quote
 
-GITHUB_RENDER_URL_BASE = 'https://render.githubusercontent.com/render/math?'
 CODECOGS_RENDER_URL = 'https://latex.codecogs.com/svg.latex?'
+GITHUB_RENDER_URL_BASE = 'https://render.githubusercontent.com/render/math?'
 
 
 class LatexRender:
@@ -67,12 +67,15 @@ class LatexRender:
         :return:
         """
         if str(self.render_type) == '1':
-            part = f'![math]({CODECOGS_RENDER_URL}{part.replace(" ", "%20")})'
+            if inline:
+                part = f'![math]({CODECOGS_RENDER_URL}{quote(part)})'
+            else:
+                part = f'<p align="center"> <img src="{CODECOGS_RENDER_URL}{quote(part)}" alt="{part}"/> </p>'
         elif str(self.render_type) == '2':
-            part = f'![math]({GITHUB_RENDER_URL_BASE}math={quote(part)})'
+            if inline:
+                part = f'![math]({GITHUB_RENDER_URL_BASE}math={quote(part)})'
+            else:
+                part = f'<p align="center"> <img src="{GITHUB_RENDER_URL_BASE}math={quote(part)}" alt="{part}"/> </p>'
         else:
             raise ValueError("type mast be one of `1` and `2`, but got {}".format(self.render_type))
-        if not inline:
-            part = re.match("^\!\[math\]\((.*)\)$", part).group(1)
-            part = f'<p align="center"> <img src="{part}"/> </p>'
         return part
